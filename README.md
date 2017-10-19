@@ -41,7 +41,6 @@ see [this video](https://youtu.be/DRtkq0ewTz4) to learn how to add c++ plugin to
 	
 
 ★ Twitter Login
-
 	![ScreenShot](docs/firebasetwitter.PNG)
   
 ★ Google Login  
