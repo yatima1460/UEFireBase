@@ -25,7 +25,7 @@ With realtime database, you can do a lot of amazing things.
 # Install
 
 This is a normal c++ plugin, if you do not familiar with how to add plugin to your project,
-see [this video](https://github.com/feixuwu/UnrealEngine4-Admob) to learn how to add c++ plugin to your project.
+see [this video](https://youtu.be/DRtkq0ewTz4) to learn how to add c++ plugin to your project.
 
 # Usage
   The best practice to learn how to use this plugin, is to read my demo project blueprint code. To test the project, you need to 
