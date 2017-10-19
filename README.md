@@ -38,25 +38,21 @@ see [this video](https://youtu.be/DRtkq0ewTz4) to learn how to add c++ plugin to
 ★ Facebook Login
 	![ScreenShot](docs/firebasefacebooklogin.PNG)
 	
-
 ★ Twitter Login
 	![ScreenShot](docs/firebasetwitter.PNG)
   
 ★ Google Login  
 	![ScreenShot](docs/firebasegooglelogin.PNG)
 	
-	
 ★ Firebase Logout
 	![ScreenShot](docs/firebaselogout.PNG)
   
- 
 ★ Firebase Realtime Database ReadValue
 	![ScreenShot](docs/firebasereadvalue.PNG)
 	
 ★ Firebase Realtime Database SetValue
 	![ScreenShot](docs/firebasesetvalue.PNG)
-	
-	
+		
 ★ Firebase Realtime Database Value Listener
 	![ScreenShot](docs/firebasevaluelistener.PNG)
 
