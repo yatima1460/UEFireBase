@@ -33,7 +33,43 @@ see [this video](https://youtu.be/DRtkq0ewTz4) to learn how to add c++ plugin to
   To see this demo how to work, you can direct download the apk from [this](https://www.dropbox.com/s/tsv5ajjgymzcl5n/UEFireBase-Android-Shipping-armv7-es2.apk?dl=0).
   
   ****Note:please do not use my google-services.json for your own product, you should create your own project on firebase console.
+  
+  
+★ Facebook Login
 
+	![ScreenShot](docs/firebasefacebooklogin.PNG)
+	
+
+★ Twitter Login
+
+	![ScreenShot](docs/firebasetwitter.PNG)
+  
+★ Google Login  
+
+	![ScreenShot](docs/firebasegooglelogin.PNG)
+	
+	
+★ Firebase Logout
+
+	![ScreenShot](docs/firebaselogout.PNG)
+  
+ 
+★ Firebase Realtime Database ReadValue
+
+	![ScreenShot](docs/firebasereadvalue.PNG)
+	
+★ Firebase Realtime Database SetValue
+     
+	![ScreenShot](docs/firebasesetvalue.PNG)
+	
+	
+★ Firebase Realtime Database Value Listener
+
+	![ScreenShot](docs/firebasevaluelistener.PNG)
+
+★ Firebase Realtime Database Child Listener
+	
+	![ScreenShot](docs/firebasechildlistener.PNG)
 
   
 # License
