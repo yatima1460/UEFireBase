@@ -24,8 +24,13 @@ With realtime database, you can do a lot of amazing things.
 
 # Install
 
-This is a normal c++ plugin, if you do not familiar with how to add plugin to your project,
+1.This is a normal c++ plugin, if you do not familiar with how to add plugin to your project,
 see [this video](https://youtu.be/DRtkq0ewTz4) to learn how to add c++ plugin to your project.
+
+2.put your google-services.json file under the folder ProjectRoot/Build/Android
+
+3.configure, open the project setting, find the firebase configure section.
+
 
 # Usage
   The best practice to learn how to use this plugin, is to read my demo project blueprint code. To test the project, you need to 
