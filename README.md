@@ -31,6 +31,8 @@ see [this video](https://youtu.be/DRtkq0ewTz4) to learn how to add c++ plugin to
 
 3.configure, open the project setting, find the firebase configure section.
 
+4.to use realtime database, you need first call FirebaseInitialize first in c++ or blueprint.
+
 
 # Usage
   The best practice to learn how to use this plugin, is to read my demo project blueprint code. To test the project, you need to 
