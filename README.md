@@ -31,9 +31,9 @@ see [this video](https://youtu.be/DRtkq0ewTz4) to learn how to add c++ plugin to
 
 3.configure, open the project setting, find the firebase configure section.
 
-4.to use realtime database, you need first call FirebaseInitialize first in c++ or blueprint.
+4.**to use realtime database, you need first call FirebaseInitialize first in c++ or blueprint.
 
-5.*****important** if the engine version is 4.18, then you need open android sdk manager and update google repository,
+5.**important if the engine version is 4.18, then you need open android sdk manager and update google repository,
 because the engine did not include full firebase 11.0.4.
 
 
