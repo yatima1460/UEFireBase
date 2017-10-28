@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Admob plugin additions-->
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- init section is always evaluated once per architecture -->
+	<init>
+		<log text="FireBase init"/>
+    <setBoolFromProperty result="bGoogleAndroidEnabled" ini="Engine" section="/Script/FireBaseEditor.GoogleSignSetting" property="bAndroidEnabled" default="false"/>
+    <setStringFromProperty result="googleClientID" ini="Engine" section="/Script/FireBaseEditor.GoogleSignSetting" property="webClientID" default="0"/>
+
+    <setBoolFromProperty result="bFacebookAndroidEnabled" ini="Engine" section="/Script/FireBaseEditor.FacebookSignSetting" property="bAndroidEnabled" default="false"/>
+    <setStringFromProperty result="facebookAndroidAppId" ini="Engine" section="/Script/FireBaseEditor.FacebookSignSetting" property="facebookAppID" default="0"/>
+
+    <setBoolFromProperty result="bTwitterAndroidEnabled" ini="Engine" section="/Script/FireBaseEditor.TwitterSignSetting" property="bAndroidEnabled" default="false"/>
+    <setStringFromProperty result="twitterAndroidApiKey" ini="Engine" section="/Script/FireBaseEditor.TwitterSignSetting" property="apiKey" default="0"/>
+    <setStringFromProperty result="twitterAndroidApiSecret" ini="Engine" section="/Script/FireBaseEditor.TwitterSignSetting" property="apiSecret" default="0"/>
+	</init>
+	
+	<!-- optional files or directories to copy to Intermediate/Android/APK -->
+	<resourceCopies>
+	</resourceCopies>
+	
+	<!-- Files to copy before the build so they can be used in the build -->
+	<prebuildCopies>
+    <copyFile src="$S(PluginDir)/ThirdParty/gradle/build.gradle" dst="$S(BuildDir)/gradle/build.gradle"/>
+    <copyFile src="$S(PluginDir)/ThirdParty/gradle/app/build.gradle" dst="$S(BuildDir)/gradle/app/build.gradle"/>
+    <copyFile src="$S(PluginDir)/../../../../Build/Android/google-services.json" dst="$S(BuildDir)/gradle/app/google-services.json"/>
+	</prebuildCopies>
+	
+	<!-- AAR dependencies -->
+	<AARImports>
+        
+    
+    <insertValue value="com.google.firebase,firebase-core,11.0.4" />
+    <insertNewline/>
+    
+    <insertValue value="com.google.firebase,firebase-auth,11.0.4" />
+    <insertNewline/>
+    
+    <insertValue value="com.google.firebase,firebase-database,11.0.4" />
+    <insertNewline/>
+    
+    <insertValue value="repository $S(PluginDir)/ThirdParty/Android"/>
+    <insertNewline/>
+    
+    <insertValue value="com.util,firebasehelper,1.0.0" />
+    <insertNewline/>
+
+    <insertValue value="com.android,volley,1.0.0" />
+    <insertNewline/>
+    
+    <insertValue value="com.facebook.android,facebook-android-sdk,4.26.0" />
+    <insertNewline/>
+    
+    <insertValue value="com.twitter.sdk.android,twitter-core,3.1.1" />
+    <insertNewline/>
+    
+  
+	</AARImports>
+
+	<!-- optional updates applied to AndroidManifest.xml -->
+	<androidManifestUpdates>
+
+        <if condition="bGoogleAndroidEnabled">
+          <true>
+            <setElement result="GoogleClientMetadata" value="meta-data"/>
+            <addAttribute tag="$GoogleClientMetadata" name="android:name" value="com.epicgames.ue4.firebase.googleclientid"/>
+            <addAttribute tag="$GoogleClientMetadata" name="android:value" value="$S(googleClientID)"/>
+            <addElement tag="application" name="GoogleClientMetadata"/>
+          </true>
+        </if>
+
+        <if condition="bTwitterAndroidEnabled">
+          <true>
+            <setElement result="TwitterKeyMetadata" value="meta-data"/>
+            <addAttribute tag="$TwitterKeyMetadata" name="android:name" value="com.epicgames.ue4.firebase.twitterkey"/>
+            <addAttribute tag="$TwitterKeyMetadata" name="android:value" value="$S(twitterAndroidApiKey)"/>
+            <addElement tag="application" name="TwitterKeyMetadata"/>
+
+
+            <setElement result="TwitterSecretMetadata" value="meta-data"/>
+            <addAttribute tag="$TwitterSecretMetadata" name="android:name" value="com.epicgames.ue4.firebase.twittersecret"/>
+            <addAttribute tag="$TwitterSecretMetadata" name="android:value" value="$S(twitterAndroidApiSecret)"/>
+            <addElement tag="application" name="TwitterSecretMetadata"/>
+          </true>
+        </if>
+    
+        <setStringFromAttribute result="PackageName" tag="manifest" name="package"/>
+
+        <if condition="bFacebookAndroidEnabled">
+          <true>
+				    <setElement result="FBAppId" value="meta-data" />
+				    <addAttribute tag="$FBAppId" name="android:name" value="com.facebook.sdk.ApplicationId" />
+				    <addAttribute tag="$FBAppId" name="android:value" value="$S(facebookAndroidAppId)" />
+				    <addElement tag="application" name="FBAppId" />
+				
+				    <setElement result="FBActivity" value="activity" />
+				    <addAttribute tag="$FBActivity" name="android:name" value="com.facebook.FacebookActivity" />
+				    <addAttribute tag="$FBActivity" name="android:configChanges" value="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+				    <addAttribute tag="$FBActivity" name="android:label" value="@string/app_name" />
+				    <addElement tag="application" name="FBActivity" />
+				
+				    <!-- <addAttribute tag="activity" name="android:name" value="com.facebook.CustomTabMainActivity"/> -->
+				    <setElement result="FBCustomActivity" value="activity" />
+				    <addAttribute tag="$FBCustomActivity" name="android:name" value="com.facebook.CustomTabActivity" />
+            <addAttribute tag="$FBCustomActivity" name="android:exported" value="true" />
+        
+            <setElement result="IntentFilterElement" value="intent-filter"/>
+            <addElements tag="$IntentFilterElement">
+					    <action android:name="android.intent.action.VIEW"/>
+					    <category android:name="android.intent.category.DEFAULT"/>
+              <category android:name="android.intent.category.BROWSABLE"/>
+              <data android:scheme="$S(facebookAndroidAppId)"/>
+				    </addElements>
+        
+            <addElement tag="$FBCustomActivity" name="IntentFilterElement"/>
+				    <addElement tag="application" name="FBCustomActivity" />
+          </true>
+        </if>
+
+        <!-- Add permissions -->
+				<addPermission android:name="android.permission.INTERNET" />
+        <addPermission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
+        <addPermission android:name="android.permission.ACCESS_NETWORK_STATE" />
+			
+	</androidManifestUpdates>
+
+	<!-- optional additions to proguard -->
+	<proguardAdditions>
+		<insert>
+ 
+      -keepattributes Signature
+      -keepattributes *Annotation*
+      -keepattributes EnclosingMethod
+      -keepattributes InnerClasses
+      -keep class com.google.android.gms.** { *; }
+      -dontwarn com.google.android.gms.**
+
+      # Required for Twitter Authentication
+      # https://docs.fabric.io/android/twitter/twitter.html#set-up-kit
+      -dontwarn com.squareup.okhttp.**
+      -dontwarn com.google.appengine.api.urlfetch.**
+      -dontwarn rx.**
+      -dontwarn rx.internal.util.**
+      -dontwarn retrofit.**
+      -dontwarn retrofit2.**
+      -dontwarn okio.**
+      -keep class com.squareup.okhttp.** { *; }
+      -keep interface com.squareup.okhttp.** { *; }
+      -keep class retrofit.** { *; }
+      -keepclasseswithmembers class * {
+      @retrofit.http.* &lt;methods&gt;;
+      }
+
+      # firebase auth
+      -keep,includedescriptorclasses public class com.google.firebase.auth.AdditionalUserInfo{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.AuthCredential{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.AuthResult{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.EmailAuthProvider{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.FacebookAuthProvider{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.FirebaseAuth { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.FirebaseAuth{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.FirebaseAuth$AuthStateListener { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.FirebaseAuth$IdTokenListener { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.FirebaseUser{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.GetTokenResult{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.GithubAuthProvider{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.GoogleAuthProvider{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.OAuthProvider{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.PhoneAuthCredential { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.PhoneAuthCredential{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.PhoneAuthProvider { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.PhoneAuthProvider{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.PhoneAuthProvider$ForceResendingToken { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.PhoneAuthProvider$OnVerificationStateChangedCallbacks { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.ProviderQueryResult{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.TwitterAuthProvider{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.UserInfo{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.auth.UserProfileChangeRequest$Builder{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.FirebaseException { *; }
+      -keep,includedescriptorclasses public class java.util.concurrent.TimeUnit{ *; }
+
+      #firebase app
+      -keep,includedescriptorclasses public class com.google.android.gms.common.api.PendingResult { *; }
+      -keep,includedescriptorclasses public class com.google.android.gms.common.api.Result { *; }
+      -keep,includedescriptorclasses public class com.google.android.gms.common.api.ResultCallback { *; }
+      -keep,includedescriptorclasses public class com.google.android.gms.common.api.Status { *; }
+      -keep,includedescriptorclasses public class com.google.android.gms.common.ConnectionResult { *; }
+      -keep,includedescriptorclasses public class com.google.android.gms.common.GoogleApiAvailability { *; }
+      -keep,includedescriptorclasses public class com.google.android.gms.common.GoogleApiAvailability{ *; }
+      -keep,includedescriptorclasses public class com.google.android.gms.crash.internal.api.CrashApiImpl { *; }
+      -keep,includedescriptorclasses public class com.google.android.gms.tasks.OnFailureListener { *; }
+      -keep,includedescriptorclasses public class com.google.android.gms.tasks.OnSuccessListener { *; }
+      -keep,includedescriptorclasses public class com.google.android.gms.tasks.Task { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.FirebaseApp{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.FirebaseOptions{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.FirebaseOptions$Builder{ *; }
+      -keep,includedescriptorclasses public class dalvik.system.DexClassLoader{ *; }
+
+      #firebase database
+      -keep,includedescriptorclasses public class com.google.firebase.database.ChildEventListener { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.DatabaseError { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.DatabaseError{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.DatabaseReference{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.DataSnapshot { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.DataSnapshot{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.FirebaseDatabase{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.MutableData { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.MutableData{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.OnDisconnect{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.Query{ *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.Transaction { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.Transaction$Handler { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.Transaction$Result { *; }
+      -keep,includedescriptorclasses public class com.google.firebase.database.ValueEventListener { *; }
+
+      
+    </insert>
+	</proguardAdditions>
+
+  <baseBuildGradleAdditions>
+    <insert>
+      
+    </insert>
+  </baseBuildGradleAdditions>
+
+
+	<!-- optional additions to the GameActivity imports in GameActivity.java -->
+	<gameActivityImportAdditions>
+		
+				<insert>
+          import com.util.firebasehelper.GoogleLogin;
+          import com.util.firebasehelper.FacebookLogin;
+          import com.util.firebasehelper.TwitterLogin;
+          import com.util.firebasehelper.AnonymouslyLogin;
+          import com.util.firebasehelper.FirebaseHelper;
+          import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
+          
+        </insert>
+			
+	</gameActivityImportAdditions>
+
+	<!-- optional additions to the GameActivity class in GameActivity.java -->
+	<gameActivityClassAdditions>
+
+    <if condition="bGoogleAndroidEnabled">
+      <true>
+        <insert>
+          GoogleLogin mGoogleLogin;
+          public void AndroidThunkJava_GoogleSignIn()
+          {
+          if (mGoogleLogin != null)
+          {
+          mGoogleLogin.signIn();
+          }
+          }
+
+          public void AndroidThunkJava_GoogleSignOut()
+          {
+          if (mGoogleLogin != null)
+          {
+          mGoogleLogin.signOut();
+          }
+          }
+        </insert>
+      </true>
+    </if>
+
+    <if condition="bFacebookAndroidEnabled">
+      <true>
+        <insert>
+          FacebookLogin mFacebookLogin;
+          public void AndroidThunkJava_FacebookSignIn()
+          {
+          if(mFacebookLogin != null)
+          {
+          mFacebookLogin.login();
+          }
+          }
+
+          public void AndroidThunkJava_FacebookSignOut()
+          {
+          if(mFacebookLogin != null)
+          {
+          mFacebookLogin.logout();
+          }
+          }
+        </insert>
+      </true>
+    </if>
+
+    <if condition="bTwitterAndroidEnabled">
+      <true>
+        <insert>
+          TwitterLogin mTwitterLogin;
+          public void AndroidThunkJava_TwitterSignIn()
+          {
+          if(mTwitterLogin != null)
+          {
+          mTwitterLogin.SignIn();
+          }
+          }
+
+          public void AndroidThunkJava_TwitterSignOut()
+          {
+          if(mTwitterLogin != null)
+          {
+          mTwitterLogin.SignOut();
+          }
+          }
+        </insert>
+      </true>
+    </if>
+    
+		<insert>
+      AnonymouslyLogin mAnonymouslyLogin;
+      FirebaseHelper mFirebaseHelper;
+      
+      public boolean AndroidThunkJava_IsUserLogin()
+      {
+        return mFirebaseHelper.isLogined();
+      }
+      
+      public void AndroidThunkJava_TryGetUserInfo()
+      {
+        mFirebaseHelper.getUserInfo();
+      }
+      
+      public void AndroidThunkJava_FirebaseSignout()
+      {
+        mFirebaseHelper.logout();
+      }
+      
+      public void AndroidThunkJava_AnonymouslySignIn()
+      {
+        if(mAnonymouslyLogin != null)
+        {
+          mAnonymouslyLogin.SignIn();
+        }
+      }
+          
+      public void AndroidThunkJava_AnonymouslySignOut()
+      {
+        if(mAnonymouslyLogin != null)
+        {
+          mAnonymouslyLogin.SignOut();
+        }
+      }
+    </insert>
+			
+	</gameActivityClassAdditions>
+	
+	<!-- optional additions to GameActivity onCreate metadata reading in GameActivity.java -->
+	<gameActivityReadMetadataAdditions>
+		
+				<insert>
+					// Facebook gameActivityReadMetadataAdditions
+				</insert>
+			
+	</gameActivityReadMetadataAdditions>
+	
+	<!-- optional additions to GameActivity onCreate in GameActivity.java -->
+	<gameActivityOnCreateAdditions>
+
+        <if condition="bGoogleAndroidEnabled">
+          <true>
+            <insert>
+              try
+              {
+              final String googleClientID = _bundle.getString("com.epicgames.ue4.firebase.googleclientid");
+              mGoogleLogin = new GoogleLogin(this, googleClientID);
+              }
+              catch(Exception e)
+              {
+
+              }
+
+            </insert>
+          </true>
+        </if>
+    
+        <if condition="bFacebookAndroidEnabled">
+          <true>
+				    <insert>
+          
+              mFacebookLogin = new FacebookLogin(this);
+              if(!mFacebookLogin.Init(BuildConfiguration) )
+              {
+                mFacebookLogin = null;
+		            Log.error("Facebook SDK failed to initialize!");
+	            }
+	            else
+	            {
+		            Log.debug("Facebook SDK success!");
+	            }
+          
+              
+              
+            </insert>
+          </true>
+        </if>
+
+        <if condition="bTwitterAndroidEnabled">
+          <true>
+            <insert>
+              try
+              {
+              final String twitterKey = _bundle.getString("com.epicgames.ue4.firebase.twitterkey");
+              final String twitterSecret = _bundle.getString("com.epicgames.ue4.firebase.twittersecret");
+              mTwitterLogin = new TwitterLogin(this, twitterKey, twitterSecret);
+              }
+              catch(Exception e)
+              {
+
+              }
+
+            </insert>
+          </true>
+        </if>
+
+        <insert>
+          mAnonymouslyLogin = new AnonymouslyLogin(this);
+          mFirebaseHelper = new FirebaseHelper(this);
+          mFirebaseHelper.Init();
+        </insert>
+
+  </gameActivityOnCreateAdditions>
+
+	<!-- optional additions to GameActivity onDestroy in GameActivity.java-->
+	<gameActivityOnDestroyAdditions>
+    <if condition="bFacebookAndroidEnabled">
+      <true>
+				<insert>
+          // Begin Unity onDestroy
+          if (mFacebookLogin != null)
+	        {
+		        mFacebookLogin.deactivate();
+	        }
+          // End Unity onDestroy
+        </insert>
+      </true>
+    </if>
+			
+	</gameActivityOnDestroyAdditions>
+	
+	<!-- optional additions to GameActivity onStart in GameActivity.java -->
+	<gameActivityOnStartAdditions>
+
+    <if condition="bGoogleAndroidEnabled">
+      <true>
+        <insert>
+          if (mGoogleLogin != null)
+          {
+          mGoogleLogin.OnStart();
+          }
+        </insert>
+      </true>
+    </if>
+
+    <if condition="bFacebookAndroidEnabled">
+      <true>
+        <insert>
+
+        </insert>
+      </true>
+    </if>
+
+    <if condition="bTwitterAndroidEnabled">
+      <true>
+        <insert>
+          if(mTwitterLogin != null)
+          {
+          mTwitterLogin.onStart();
+          }
+        </insert>
+      </true>
+    </if>
+
+          <insert>
+          // Begin Unity onStart
+          if(mAnonymouslyLogin != null)
+          {
+          mAnonymouslyLogin.OnStart();
+          }
+          
+          // End Unity onStart
+        </insert>
+		
+	</gameActivityOnStartAdditions>
+
+	<!-- optional additions to GameActivity onStop in GameActivity.java -->
+	<gameActivityOnStopAdditions>
+
+    <if condition="bGoogleAndroidEnabled">
+      <true>
+        <insert>
+          if (mGoogleLogin != null)
+          {
+          mGoogleLogin.OnStop();
+          }
+        </insert>
+      </true>
+    </if>
+			
+	</gameActivityOnStopAdditions>
+
+	<!-- optional additions to GameActivity onPause in GameActivity.java -->
+	<gameActivityOnPauseAdditions>
+    <if condition="bFacebookAndroidEnabled">
+      <true>
+				<insert>
+          
+          if (mFacebookLogin != null)
+	        {
+		        mFacebookLogin.deactivate();
+	        }
+          
+        </insert>
+        </true>
+      </if>
+			
+	</gameActivityOnPauseAdditions>
+
+	<!-- optional additions to GameActivity onResume in GameActivity.java -->
+	<gameActivityOnResumeAdditions>
+    <if condition="bFacebookAndroidEnabled">
+      <true>
+				<insert>
+          
+          if (mFacebookLogin != null)
+	        {
+		        mFacebookLogin.activate();
+	        }
+        </insert>
+      </true>
+    </if>
+			
+	</gameActivityOnResumeAdditions>
+
+	<!-- optional additions to GameActivity onActivityResult in GameActivity.java -->
+	<gameActivityOnActivityResultAdditions>
+    <if condition="bGoogleAndroidEnabled">
+      <true>
+        <insert>
+          if (mGoogleLogin != null)
+          {
+          mGoogleLogin.onActivityResult(requestCode, resultCode, data);
+          }
+        </insert>
+      </true>
+    </if>
+
+    <if condition="bFacebookAndroidEnabled">
+      <true>
+        <insert>
+          if (mFacebookLogin != null)
+          {
+          mFacebookLogin.OnActivityResult(requestCode, resultCode, data);
+          }
+        </insert>
+      </true>
+    </if>
+
+    <if condition="bTwitterAndroidEnabled">
+      <true>
+        <insert>
+          if(mTwitterLogin != null)
+          {
+          mTwitterLogin.onActivityResult(requestCode, resultCode, data);
+          }
+        </insert>
+      </true>
+    </if>
+    
+	</gameActivityOnActivityResultAdditions>
+
+	<!-- optional libraries to load in GameActivity.java before libUE4.so -->
+	<soLoadLibrary>
+	</soLoadLibrary>
+</root>

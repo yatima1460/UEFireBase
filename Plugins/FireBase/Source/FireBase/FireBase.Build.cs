@@ -5,16 +5,65 @@ using System.IO;
 
 public class FireBase : ModuleRules
 {
+    private string EngineMajorVersion;
+    private string EngineMinorVersion;
+    private string EnginePatchVersion;
+
+
     private string ModulePath
     {
         get { return ModuleDirectory; }
     }
 
+    string GetEngineDirectory()
+    {
+        string magicKey = "UE_ENGINE_DIRECTORY=";
+        for (var i = 0; i < Definitions.Count; i++)
+        {
+            if (Definitions[i].IndexOf(magicKey) >= 0)
+            {
+                return Definitions[i].Substring(magicKey.Length + 1);
+            }
+        }
+
+        return "";
+    }
+
+    private string ReadEngineVersion(string EngineDirectory)
+    {
+        string EngineVersionFile = Path.Combine(EngineDirectory, "Runtime", "Launch", "Resources", "Version.h");
+        string[] EngineVersionLines = File.ReadAllLines(EngineVersionFile);
+        for (int i = 0; i < EngineVersionLines.Length; ++i)
+        {
+            if (EngineVersionLines[i].StartsWith("#define ENGINE_MAJOR_VERSION"))
+            {
+                EngineMajorVersion = EngineVersionLines[i].Split('\t')[1].Trim(' ');
+            }
+            else if (EngineVersionLines[i].StartsWith("#define ENGINE_MINOR_VERSION"))
+            {
+                EngineMinorVersion = EngineVersionLines[i].Split('\t')[1].Trim(' ');
+            }
+            else if (EngineVersionLines[i].StartsWith("#define ENGINE_PATCH_VERSION"))
+            {
+                EnginePatchVersion = EngineVersionLines[i].Split('\t')[1].Trim(' ');
+            }
+
+        }
+
+        return EngineMajorVersion + "." + EngineMinorVersion + "." + EnginePatchVersion;
+    }
+
+
     public FireBase(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-		
-		PublicIncludePaths.AddRange(
+
+        string strEngineDir = GetEngineDirectory();
+        string strEngineVersion = ReadEngineVersion(strEngineDir);
+
+        System.Console.WriteLine("version:" + strEngineVersion);
+
+        PublicIncludePaths.AddRange(
 			new string[] {
 				"FireBase/Public"
 				
@@ -81,8 +130,16 @@ public class FireBase : ModuleRules
                 PublicAdditionalLibraries.Add(Lib);
             }
 
-            string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, BuildConfiguration.RelativeEnginePath);
-            AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(PluginPath, "FireBase_UPL.xml")));
+            string PluginPath = Utils.MakePathRelativeTo(ModuleDirectory, Target.RelativeEnginePath);
+
+            if (EngineMinorVersion == "18")
+            {
+                AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(PluginPath, "FireBase418_UPL.xml")));
+            }
+            else
+            {
+                AdditionalPropertiesForReceipt.Add(new ReceiptProperty("AndroidPlugin", Path.Combine(PluginPath, "FireBase_UPL.xml")));
+            } 
         }
         else if (Target.Platform == UnrealTargetPlatform.Win32 || Target.Platform == UnrealTargetPlatform.Win64)
         {
