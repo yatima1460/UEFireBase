@@ -1,4 +1,4 @@
-# UnrealEngine4-EZ-Mobile-Ads
+# UnrealEngine4-FireBase
 this is a firebase basic plugin for unreal engine 4 mobile developer, both c++ and blueprint supported.
 
 This plugin currently is only support android(ios will later support), it contains firbase authentication and fireabse realtime database.
