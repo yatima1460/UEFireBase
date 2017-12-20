@@ -319,36 +319,41 @@
 		<insert>
       AnonymouslyLogin mAnonymouslyLogin;
       FirebaseHelper mFirebaseHelper;
-      
+
       public boolean AndroidThunkJava_IsUserLogin()
       {
-        return mFirebaseHelper.isLogined();
+      return mFirebaseHelper.isLogined();
       }
-      
+
       public void AndroidThunkJava_TryGetUserInfo()
       {
-        mFirebaseHelper.getUserInfo();
+      mFirebaseHelper.getUserInfo();
       }
-      
+
       public void AndroidThunkJava_FirebaseSignout()
       {
-        mFirebaseHelper.logout();
+      mFirebaseHelper.logout();
       }
-      
+
+      public String AndroidThunkJava_GetLoginProvider()
+      {
+      return mFirebaseHelper.getLoginProvider();
+      }
+
       public void AndroidThunkJava_AnonymouslySignIn()
       {
-        if(mAnonymouslyLogin != null)
-        {
-          mAnonymouslyLogin.SignIn();
-        }
+      if(mAnonymouslyLogin != null)
+      {
+      mAnonymouslyLogin.SignIn();
       }
-          
+      }
+
       public void AndroidThunkJava_AnonymouslySignOut()
       {
-        if(mAnonymouslyLogin != null)
-        {
-          mAnonymouslyLogin.SignOut();
-        }
+      if(mAnonymouslyLogin != null)
+      {
+      mAnonymouslyLogin.SignOut();
+      }
       }
     </insert>
 			

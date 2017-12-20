@@ -25,11 +25,13 @@ public:
 	
 	virtual void Activate() override;
 	virtual void Activete_imp();
+	virtual void PostSuccedComplete(FFireBaseUser User);
 
 private:
 
 	FFireBaseSignSuccedCompleteDelegate SuccedDelegate;
 	FDelegateHandle SuccedDelegateHandle;
 
-	void OnSuccedComplete(FFireBaseUser User);	
+	void OnSuccedComplete(FFireBaseUser User);
+	
 };

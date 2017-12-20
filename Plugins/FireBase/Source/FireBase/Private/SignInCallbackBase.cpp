@@ -25,9 +25,16 @@ void USignInCallbackBase::Activete_imp()
 
 }
 
+void USignInCallbackBase::PostSuccedComplete(FFireBaseUser User)
+{
+
+}
+
 void USignInCallbackBase::OnSuccedComplete(FFireBaseUser User)
 {
+	PostSuccedComplete(User);
 	OnSuccess.Broadcast(User);
+	
 	FFireBaseModule * Module = FModuleManager::Get().LoadModulePtr<FFireBaseModule>("FireBase");
 	if (Module != nullptr)
 	{

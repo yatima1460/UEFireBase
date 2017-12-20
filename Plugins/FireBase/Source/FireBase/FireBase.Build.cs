@@ -148,17 +148,26 @@ public class FireBase : ModuleRules
             PrivateIncludePaths.Add("FireBase/ThirdParty/FireBaseCpp/include");
 
             PublicLibraryPaths.Add(Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/FireBaseCpp/libs/windows")));
-
-            /*string[] StaticLibrariesAndroid = new string[] {
-                "libapp.a",
-                "libdatabase.a",
-            };
-
-            foreach (string Lib in StaticLibrariesAndroid)
-            {
-                PublicAdditionalLibraries.Add(Lib);
-            }*/
         }
+        /*else if(Target.Platform == UnrealTargetPlatform.UWP64 || Target.Platform == UnrealTargetPlatform.UWP32)
+        {
+            PrivateIncludePaths.Add("FireBase/Private/Common");
+            PrivateIncludePaths.Add("FireBase/Private/Windows");
+            PrivateIncludePaths.Add("FireBase/ThirdParty/FireBaseCpp/include");
 
+            PublicLibraryPaths.Add(Path.GetFullPath(Path.Combine(ModulePath, "ThirdParty/FireBaseCpp/libs/windows")));
+        }*/
+        else if (Target.Platform == UnrealTargetPlatform.Linux)
+        {
+            PrivateIncludePaths.Add("FireBase/Private/Common");
+            PrivateIncludePaths.Add("FireBase/Private/Windows");
+            PrivateIncludePaths.Add("FireBase/ThirdParty/FireBaseCpp/include");
+        }
+        else if(Target.Platform == UnrealTargetPlatform.IOS)
+        {
+            PrivateIncludePaths.Add("FireBase/Private/Common");
+            PrivateIncludePaths.Add("FireBase/Private/Windows");
+            PrivateIncludePaths.Add("FireBase/ThirdParty/FireBaseCpp/include");
+        }
     }
 }

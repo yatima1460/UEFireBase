@@ -51,7 +51,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFireBaseSignOutDelegate);
 
 
 UCLASS()
-class UFireBaseBPLibrary : public UBlueprintFunctionLibrary
+class FIREBASE_API UFireBaseBPLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_UCLASS_BODY()
 

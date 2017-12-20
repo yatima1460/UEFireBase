@@ -49,6 +49,29 @@ static bool callBoolFunction(const FString& strFunName)
 	return false;
 }
 
+static FString callStringFunction(const FString& strFunName)
+{
+	if (JNIEnv* Env = FAndroidApplication::GetJavaEnv())
+	{
+		const bool bIsOptional = false;
+		jmethodID tmpFun = FJavaWrapper::FindMethod(Env, FJavaWrapper::GameActivityClassID, TCHAR_TO_UTF8(*strFunName), "()Ljava/lang/String;", bIsOptional);
+		if (tmpFun == nullptr)
+		{
+			UE_LOG(FireBase, Error, TEXT("%s not found"), *strFunName);
+			return FString();
+		}
+
+		jstring ret = (jstring)FJavaWrapper::CallObjectMethod(Env, FJavaWrapper::GameActivityThis, tmpFun);
+		if (ret != NULL)
+		{
+			const char* charsRet = Env->GetStringUTFChars(ret, 0);
+			return FString(UTF8_TO_TCHAR(charsRet));
+		}
+	}
+
+	return FString();
+}
+
 void UFireBaseBPLibrary::GoogleSign()
 {
 	callVoidFunction(TEXT("AndroidThunkJava_GoogleSignIn") );
@@ -173,7 +196,25 @@ static void nativeSigninSuccedHelper(JNIEnv* jenv, jobject thiz, jstring email, 
 
 void UFireBaseBPLibrary::FirebaseSignout()
 {
-	callVoidFunction(TEXT("AndroidThunkJava_FirebaseSignout"));
+	FString strProvider = callStringFunction("AndroidThunkJava_GetLoginProvider");
+	UE_LOG(FireBase, Error, TEXT("Login Provider: %s"), *strProvider);
+
+	if (strProvider.ToLower() == TEXT("facebook") )
+	{
+		callVoidFunction(TEXT("AndroidThunkJava_FacebookSignOut"));
+	}
+	else if (strProvider.ToLower() == TEXT("google") )
+	{
+		callVoidFunction(TEXT("AndroidThunkJava_GoogleSignIn"));
+	}
+	else if (strProvider.ToLower() == TEXT("twitter"))
+	{
+		callVoidFunction(TEXT("AndroidThunkJava_TwitterSignOut"));
+	}
+	else
+	{
+		callVoidFunction(TEXT("AndroidThunkJava_FirebaseSignout"));
+	}
 }
 
 static void nativeLogoutHelper(JNIEnv* jenv, jobject thiz)
